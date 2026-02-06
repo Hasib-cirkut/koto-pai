@@ -27,19 +27,21 @@
   <div class="mx-auto w-full max-w-md px-4 py-6">
     <header class="mb-6">
       <p class="text-xs uppercase tracking-[0.2em] text-slate-400 mb-2">Koto Pai</p>
-      <div class="mb-4 flex flex-col items-between justify-between text-xs uppercase tracking-[0.2em] text-slate-500 space-y-2">
-        <div class="flex justify-between items-center gap-3">
-          <div>
-            <%= link_to "Home", transactions_path, class: "rounded-full border border-slate-800 px-3 py-1 text-[10px] font-semibold text-slate-400 hover:border-slate-600" %>
-            <% if request.referer.present? %>
-              <%= link_to "Back", "javascript:history.back()", class: "rounded-full border border-slate-800 px-3 py-1 text-[10px] font-semibold text-slate-400 hover:border-slate-600" %>
-            <% end %>
-          </div>
+      <% if user_signed_in? %>
+        <div class="mb-4 flex flex-col items-between justify-between text-xs uppercase tracking-[0.2em] text-slate-500 space-y-2">
+          <div class="flex justify-between items-center gap-3">
+            <div>
+              <%= link_to "Home", transactions_path, class: "rounded-full border border-slate-800 px-3 py-1 text-[10px] font-semibold text-slate-400 hover:border-slate-600" %>
+              <% if request.referer.present? %>
+                <%= link_to "Back", "javascript:history.back()", class: "rounded-full border border-slate-800 px-3 py-1 text-[10px] font-semibold text-slate-400 hover:border-slate-600" %>
+              <% end %>
+            </div>
 
-          <%= button_to "Logout", destroy_user_session_path, method: :delete, class: "rounded-full border border-rose-700/60 bg-rose-500/10 px-3 py-1 text-[10px] font-medium text-rose-200 hover:border-rose-400" %>
+            <%= button_to "Logout", destroy_user_session_path, method: :delete, class: "rounded-full border border-rose-700/60 bg-rose-500/10 px-3 py-1 text-[10px] font-medium text-rose-200 hover:border-rose-400" %>
+          </div>
+          <span class="text-[10px]">/ <%= content_for(:breadcrumb) || "Dashboard" %></span>
         </div>
-        <span class="text-[10px]">/ <%= content_for(:breadcrumb) || "Dashboard" %></span>
-      </div>
+      <% end %>
       <div class="flex items-center justify-between">
         <div>
           <h1 class="text-2xl font-semibold leading-tight"><%= content_for(:page_title) || "Transactions" %></h1>
