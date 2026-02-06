@@ -8,32 +8,32 @@ class TransactionParticipantsController < ApplicationController
 
   def create
     unless can_manage_participants?
-      return redirect_to @transaction, alert: "You do not have permission to add participants."
+      return redirect_to transaction_path(@transaction), alert: "You do not have permission to add participants."
     end
 
     user = User.find_by(email: params[:participant_email].to_s.downcase)
 
     unless user
-      return redirect_to @transaction, alert: "User not found."
+      return redirect_to transaction_path(@transaction), alert: "User not found."
     end
 
     participant = @transaction.chain_participants.new(user: user, role: participant_role)
 
     if participant.save
-      redirect_to @transaction, notice: "Participant added."
+      redirect_to transaction_path(@transaction), notice: "Participant added."
     else
-      redirect_to @transaction, alert: participant.errors.full_messages.to_sentence
+      redirect_to transaction_path(@transaction), alert: participant.errors.full_messages.to_sentence
     end
   end
 
   def destroy
     unless can_manage_participants?
-      return redirect_to @transaction, alert: "You do not have permission to remove participants."
+      return redirect_to transaction_path(@transaction), alert: "You do not have permission to remove participants."
     end
 
     participant = @transaction.chain_participants.find(params[:id])
     participant.destroy
-    redirect_to @transaction, notice: "Participant removed."
+    redirect_to transaction_path(@transaction), notice: "Participant removed."
   end
 
   private
