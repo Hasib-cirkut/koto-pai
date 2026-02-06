@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title><%= content_for(:title) || "Koto Pai" %></title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= yield :head %>
+
+  <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+  <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+  <link rel="icon" href="/icon.png" type="image/png">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icon.png">
+
+  <%# Includes all stylesheet files in app/assets/stylesheets %>
+  <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
+
+<body class="min-h-dvh bg-slate-950 text-slate-100 antialiased">
+<main class="min-h-dvh">
+  <div class="mx-auto w-full max-w-md px-4 py-6">
+    <header class="mb-6">
+      <div class="mb-4 flex items-center justify-between text-xs uppercase tracking-[0.2em] text-slate-500">
+        <div class="flex items-center gap-3">
+          <%= link_to "Home", transactions_path, class: "rounded-full border border-slate-800 px-3 py-1 text-[10px] font-semibold text-slate-400 hover:border-slate-600" %>
+          <% if request.referer.present? %>
+            <%= link_to "Back", "javascript:history.back()", class: "rounded-full border border-slate-800 px-3 py-1 text-[10px] font-semibold text-slate-400 hover:border-slate-600" %>
+          <% end %>
+        </div>
+        <span class="text-[10px]"><%= content_for(:breadcrumb) || "Dashboard" %></span>
+      </div>
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-xs uppercase tracking-[0.2em] text-slate-400">Koto Pai</p>
+          <h1 class="text-2xl font-semibold leading-tight"><%= content_for(:page_title) || "Transactions" %></h1>
+        </div>
+        <% if user_signed_in? %>
+          <%= link_to "New", new_transaction_path, class: "rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm font-medium hover:border-slate-500" %>
+        <% end %>
+      </div>
+    </header>
+
+    <% if notice.present? %>
+      <div class="mb-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
+        <%= notice %>
+      </div>
+    <% end %>
+
+    <% if alert.present? %>
+      <div class="mb-4 rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
+        <%= alert %>
+      </div>
+    <% end %>
+
+    <%= yield %>
+  </div>
+</main>
+</body>
+</html>
