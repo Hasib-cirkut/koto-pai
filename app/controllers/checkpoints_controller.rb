@@ -25,6 +25,6 @@ class CheckpointsController < ApplicationController
   end
 
   def checkpoint_params
-    params.require(:checkpoint).permit(:amount_cents, :note)
+    params.require(:checkpoint).permit(:amount, :note)
   end
 end

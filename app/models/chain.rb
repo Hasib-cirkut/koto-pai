@@ -11,8 +11,8 @@ class Chain < ApplicationRecord
 
   enum :status, { open: 0, closed: 1, archived: 2 }
 
-  validates :lent_money_cents, numericality: { only_integer: true, greater_than: 0 }
-  validates :outstanding_cents, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :lent_money, numericality: { only_integer: true, greater_than: 0 }
+  validates :outstanding, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :currency, presence: true
   validate :lender_or_borrower_present
 
@@ -21,7 +21,7 @@ class Chain < ApplicationRecord
   private
 
   def set_outstanding_cents
-    self.outstanding_cents ||= lent_money_cents
+    self.outstanding ||= lent_money
     self.currency ||= "BDT"
   end
 

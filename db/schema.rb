@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_07_004655) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_07_005950) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -31,8 +31,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_07_004655) do
     t.bigint "lender_id"
     t.bigint "borrower_id"
     t.bigint "creator_id", null: false
-    t.integer "lent_money_cents", null: false
-    t.integer "outstanding_cents", null: false
+    t.integer "lent_money", null: false
+    t.integer "outstanding", null: false
     t.string "currency", default: "BDT", null: false
     t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
@@ -45,7 +45,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_07_004655) do
   create_table "checkpoints", force: :cascade do |t|
     t.bigint "chain_id", null: false
     t.bigint "created_by_id", null: false
-    t.integer "amount_cents", null: false
+    t.integer "amount", null: false
     t.text "note"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

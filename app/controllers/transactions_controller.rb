@@ -1,6 +1,6 @@
 class TransactionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_transaction, only: [:show]
+  before_action :set_transaction, only: [:show, :history]
 
   def index
     user_id = current_user.id
@@ -46,7 +46,7 @@ class TransactionsController < ApplicationController
       ChainParticipant.create!(chain: @transaction, user: lender, role: :lender) if lender
       ChainParticipant.create!(chain: @transaction, user: borrower, role: :borrower) if borrower
 
-      redirect_to @transaction, notice: "Transaction created."
+      redirect_to transaction_path(@transaction), notice: "Transaction created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -57,6 +57,10 @@ class TransactionsController < ApplicationController
     @participant = ChainParticipant.new
   end
 
+  def history
+    @checkpoints = @transaction.checkpoints.order(created_at: :desc)
+  end
+
   private
 
   def set_transaction
@@ -64,6 +68,6 @@ class TransactionsController < ApplicationController
   end
 
   def transaction_params
-    params.require(:transaction).permit(:title, :description, :lent_money_cents, :currency)
+    params.require(:transaction).permit(:title, :description, :lent_money, :currency)
   end
 end

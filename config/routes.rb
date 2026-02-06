@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   root "transactions#index"
 
   resources :transactions, only: [:index, :new, :create, :show] do
+    get :history, on: :member
     resources :transaction_participants, only: [:index, :create, :destroy]
     resources :checkpoints, only: [:create]
   end
