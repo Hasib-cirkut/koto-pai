@@ -1,0 +1,9 @@
+<div id="<%= dom_id(transaction, :checkpoints) %>" class="mt-4 space-y-2">
+  <% if transaction.checkpoints.any? %>
+    <% transaction.checkpoints.order(created_at: :desc).each do |checkpoint| %>
+      <%= render "checkpoints/checkpoint", checkpoint: checkpoint, transaction: transaction %>
+    <% end %>
+  <% else %>
+    <p class="text-sm text-slate-500">No checkpoints yet.</p>
+  <% end %>
+</div>

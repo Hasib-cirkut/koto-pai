@@ -22,7 +22,7 @@
   <%= javascript_importmap_tags %>
 </head>
 
-<body class="min-h-dvh bg-slate-950 text-slate-100 antialiased">
+<body class="min-h-dvh bg-slate-950 text-slate-100 antialiased" data-signed-in="<%= user_signed_in? %>">
 <main class="min-h-dvh">
   <div class="mx-auto w-full max-w-md px-4 py-6">
     <header class="mb-6">
@@ -53,6 +53,8 @@
         <% end %>
       </div>
     </header>
+
+    <div id="notifications" class="mb-4 space-y-2"></div>
 
     <% if notice.present? %>
       <div class="mb-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">

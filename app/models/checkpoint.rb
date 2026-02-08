@@ -1,4 +1,6 @@
 class Checkpoint < ApplicationRecord
+  include ActionView::RecordIdentifier
+
   belongs_to :chain
   belongs_to :created_by, class_name: "User"
 
@@ -6,6 +8,7 @@ class Checkpoint < ApplicationRecord
   validate :amount_not_exceed_outstanding, on: :create
 
   after_create_commit :apply_to_chain
+  after_create_commit :broadcast_checkpoint
 
   private
 
@@ -24,5 +27,27 @@ class Checkpoint < ApplicationRecord
       new_status = new_outstanding.zero? ? :closed : chain.status
       chain.update!(outstanding: new_outstanding, status: new_status)
     end
+  end
+
+  def broadcast_checkpoint
+    broadcast_prepend_to chain,
+                         target: dom_id(chain, :checkpoints),
+                         partial: "checkpoints/checkpoint",
+                         locals: { checkpoint: self, transaction: chain }
+
+    broadcast_replace_to chain,
+                         target: dom_id(chain, :outstanding),
+                         partial: "checkpoints/outstanding",
+                         locals: { chain: chain }
+
+    broadcast_replace_to chain,
+                         target: dom_id(chain, :checkpoint_count),
+                         partial: "checkpoints/count",
+                         locals: { transaction: chain }
+
+    broadcast_replace_to chain,
+                         target: dom_id(chain, :card),
+                         partial: "transactions/card",
+                         locals: { transaction: chain }
   end
 end

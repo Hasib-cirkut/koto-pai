@@ -1,6 +1,8 @@
 <% content_for :page_title, @transaction.title.presence || "Transaction" %>
 <% content_for :breadcrumb, "Home / Transaction" %>
 
+<%= turbo_stream_from @transaction %>
+
 <div class="space-y-6">
   <div class="rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
     <div class="flex items-start justify-between">
@@ -14,9 +16,9 @@
       </div>
       <div class="text-right">
         <p class="text-xs uppercase tracking-[0.2em] text-slate-500">Outstanding</p>
-        <p class="mt-1 text-2xl font-semibold text-emerald-300">
-          <%= number_to_currency(@transaction.outstanding, unit: "৳", precision: 0) %>
-        </p>
+        <div id="<%= dom_id(@transaction, :outstanding) %>">
+          <%= render "checkpoints/outstanding", chain: @transaction %>
+        </div>
         <p class="mt-1 text-xs text-slate-500"><%= @transaction.status %></p>
       </div>
     </div>
@@ -52,22 +54,9 @@
   <div class="rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
     <div class="flex items-center justify-between">
       <p class="text-xs uppercase tracking-[0.2em] text-slate-500">Checkpoints</p>
-      <p class="text-xs text-slate-500"><%= @transaction.checkpoints.count %> recorded</p>
-    </div>
-    <div class="mt-4 space-y-2">
-      <% if @transaction.checkpoints.any? %>
-        <% @transaction.checkpoints.order(created_at: :desc).each do |checkpoint| %>
-          <div class="flex items-center justify-between rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm">
-            <div>
-            <p class="font-medium text-emerald-200"><%= number_to_currency(checkpoint.amount, unit: "৳", precision: 0) %></p>
-              <p class="text-xs text-slate-500"><%= checkpoint.note.presence || "No note" %></p>
-            </div>
-            <p class="text-xs text-slate-500"><%= checkpoint.created_at.strftime("%b %d, %Y") %></p>
-          </div>
-        <% end %>
-      <% else %>
-        <p class="text-sm text-slate-500">No checkpoints yet.</p>
-      <% end %>
+      <div id="<%= dom_id(@transaction, :checkpoint_count) %>">
+        <%= render "checkpoints/count", transaction: @transaction %>
+      </div>
     </div>
 
     <% if @transaction.lender_id == current_user.id %>
@@ -87,5 +76,6 @@
     <% else %>
       <p class="mt-4 text-xs text-slate-500">Only the lender can add checkpoints.</p>
     <% end %>
+    <%= render "checkpoints/list", transaction: @transaction %>
   </div>
 </div>

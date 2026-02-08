@@ -13,6 +13,8 @@ class TransactionParticipantsController < ApplicationController
 
     user = User.find_by(email: params[:participant_email].to_s.downcase)
 
+    puts "Looking for user with email: #{params[:participant_email].to_s.downcase}"
+
     unless user
       return redirect_to transaction_path(@transaction), alert: "User not found."
     end
@@ -20,6 +22,7 @@ class TransactionParticipantsController < ApplicationController
     participant = @transaction.chain_participants.new(user: user, role: participant_role)
 
     if participant.save
+      notify_participant_added(user)
       redirect_to transaction_path(@transaction), notice: "Participant added."
     else
       redirect_to transaction_path(@transaction), alert: participant.errors.full_messages.to_sentence
@@ -51,5 +54,19 @@ class TransactionParticipantsController < ApplicationController
     return :viewer unless ChainParticipant.roles.key?(role)
 
     role
+  end
+
+  private
+
+  def notify_participant_added(user)
+    puts "Notifying user: #{user.email}"
+    return if user == current_user
+
+    NotificationsChannel.broadcast_to(
+      user,
+      title: "Added to transaction",
+      body: "#{current_user.email} added you to #{@transaction.title.presence || "a transaction"}.",
+      chain_id: @transaction.id
+    )
   end
 end

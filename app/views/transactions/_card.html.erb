@@ -1,0 +1,22 @@
+<%= link_to transaction_path(transaction), id: dom_id(transaction, :card), class: "block rounded-3xl border border-slate-800 bg-slate-900/60 p-5 transition hover:border-slate-600" do %>
+  <div class="flex items-start justify-between">
+    <div>
+      <p class="text-sm text-slate-400"><%= transaction.currency %></p>
+      <h2 class="text-lg font-semibold"><%= transaction.title.presence || "Untitled transaction" %></h2>
+      <p class="mt-1 text-xs text-slate-500">
+        Lender: <%= transaction.lender&.email || "Unassigned" %> • Borrower: <%= transaction.borrower&.email || "Unassigned" %>
+      </p>
+      <% latest_checkpoint = transaction.checkpoints.order(created_at: :desc).first %>
+      <p class="mt-2 text-xs text-slate-500">
+        History: <%= latest_checkpoint&.note || transaction.description.presence || "No history yet." %>
+      </p>
+    </div>
+    <div class="text-right">
+      <p class="text-xs uppercase tracking-[0.2em] text-slate-500">Outstanding</p>
+      <p class="text-lg font-semibold text-emerald-300">
+        <%= number_to_currency(transaction.outstanding, unit: "৳", precision: 0) %>
+      </p>
+      <p class="mt-1 text-xs text-slate-500"><%= transaction.status %></p>
+    </div>
+  </div>
+<% end %>

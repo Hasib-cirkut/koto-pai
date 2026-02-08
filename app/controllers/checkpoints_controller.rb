@@ -10,6 +10,7 @@ class CheckpointsController < ApplicationController
     @checkpoint = @transaction.checkpoints.new(checkpoint_params.merge(created_by: current_user))
 
     if @checkpoint.save
+      notify_parties_for_checkpoint(@checkpoint)
       redirect_to transaction_path(@transaction), notice: "Checkpoint added."
     else
       flash.now[:alert] = @checkpoint.errors.full_messages.to_sentence
@@ -26,5 +27,23 @@ class CheckpointsController < ApplicationController
 
   def checkpoint_params
     params.require(:checkpoint).permit(:amount, :note)
+  end
+
+  private
+
+  def notify_parties_for_checkpoint(checkpoint)
+
+    recipients = checkpoint.chain.participants.to_a.uniq - [current_user]
+
+    puts "Notifying recipients: #{recipients.map(&:email).join(', ')}"
+
+    recipients.each do |user|
+      NotificationsChannel.broadcast_to(
+        user,
+        title: "Payment recorded",
+        body: "#{current_user.email} recorded ৳#{checkpoint.amount} for #{@transaction.title.presence || "a transaction"}.",
+        chain_id: @transaction.id
+      )
+    end
   end
 end
