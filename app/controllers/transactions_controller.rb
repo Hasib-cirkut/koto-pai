@@ -45,6 +45,8 @@ class TransactionsController < ApplicationController
     if @transaction.save
       ChainParticipant.create!(chain: @transaction, user: lender, role: :lender) if lender
       ChainParticipant.create!(chain: @transaction, user: borrower, role: :borrower) if borrower
+      notify_participants_new_transaction
+      broadcast_new_transaction_card
 
       redirect_to transaction_path(@transaction), notice: "Transaction created."
     else
@@ -81,5 +83,37 @@ class TransactionsController < ApplicationController
 
   def transaction_params
     params.require(:transaction).permit(:title, :description, :lent_money, :currency)
+  end
+
+  def notify_participants_new_transaction
+    recipients = (@transaction.participants.to_a + [@transaction.creator]).compact.uniq - [current_user]
+
+    recipients.each do |user|
+      NotificationsChannel.broadcast_to(
+        user,
+        title: "New transaction",
+        body: "#{current_user.email} created #{@transaction.title.presence || "a transaction"}.",
+        chain_id: @transaction.id
+      )
+    end
+  end
+
+  def broadcast_new_transaction_card
+    recipients = (@transaction.participants.to_a + [@transaction.creator]).compact.uniq
+
+    recipients.each do |user|
+      stream = "transactions_user_#{user.id}"
+      @transaction.broadcast_prepend_to(
+        stream,
+        target: "transactions_list",
+        partial: "transactions/card",
+        locals: { transaction: @transaction }
+      )
+
+      @transaction.broadcast_remove_to(
+        stream,
+        target: "transactions_empty"
+      )
+    end
   end
 end
