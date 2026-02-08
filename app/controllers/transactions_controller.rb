@@ -1,6 +1,6 @@
 class TransactionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_transaction, only: [:show, :history, :destroy]
+  before_action :set_transaction, only: [:show, :history, :update, :destroy]
 
   def index
     user_id = current_user.id
@@ -72,6 +72,21 @@ class TransactionsController < ApplicationController
     redirect_to transactions_path, notice: "Transaction deleted."
   end
 
+  def update
+    unless @transaction.creator_id == current_user.id
+      return redirect_to transaction_path(@transaction), alert: "Only the creator can update this transaction."
+    end
+
+    if @transaction.update(transaction_params)
+      redirect_to transaction_path(@transaction), notice: "Transaction updated."
+    else
+      flash.now[:alert] = @transaction.errors.full_messages.to_sentence
+      @checkpoint = @transaction.checkpoints.new
+      @participant = ChainParticipant.new
+      render :show, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_transaction
@@ -82,7 +97,8 @@ class TransactionsController < ApplicationController
   end
 
   def transaction_params
-    params.require(:transaction).permit(:title, :description, :lent_money, :currency)
+    key = params[:transaction].present? ? :transaction : :chain
+    params.require(key).permit(:title, :description, :lent_money, :currency)
   end
 
   def notify_participants_new_transaction

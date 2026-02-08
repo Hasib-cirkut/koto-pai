@@ -3,6 +3,17 @@
 
 <div class="rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
   <%= form_with scope: :transaction, url: transactions_path, class: "space-y-5" do |f| %>
+    <% if @transaction.errors.any? %>
+      <div class="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
+        <p class="font-semibold">Please fix the following:</p>
+        <ul class="mt-2 list-disc pl-4 text-xs text-rose-100">
+          <% @transaction.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
     <div>
       <%= f.label :title, class: "text-xs uppercase tracking-[0.2em] text-slate-400" %>
       <%= f.text_field :title, class: "mt-2 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100 focus:border-emerald-400 focus:outline-none", placeholder: "Rent for January" %>
@@ -16,7 +27,7 @@
     <div class="grid gap-4 sm:grid-cols-2">
       <div>
         <%= f.label :lent_money, "Amount (BDT)", class: "text-xs uppercase tracking-[0.2em] text-slate-400" %>
-        <%= f.number_field :lent_money, min: 1, class: "mt-2 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100 focus:border-emerald-400 focus:outline-none", placeholder: "15000" %>
+        <%= f.number_field :lent_money, min: 1, required: true, class: "mt-2 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100 focus:border-emerald-400 focus:outline-none", placeholder: "15000" %>
       </div>
       <div>
         <%= f.label :currency, class: "text-xs uppercase tracking-[0.2em] text-slate-400" %>

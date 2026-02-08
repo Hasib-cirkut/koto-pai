@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "transactions#index"
 
-  resources :transactions, only: [:index, :new, :create, :show, :destroy] do
+  resources :transactions, only: [:index, :new, :create, :show, :update, :destroy] do
     get :history, on: :member
     resources :transaction_participants, only: [:index, :create, :destroy]
     resources :checkpoints, only: [:create]
