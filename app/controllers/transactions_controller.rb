@@ -1,6 +1,6 @@
 class TransactionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_transaction, only: [:show, :history]
+  before_action :set_transaction, only: [:show, :history, :destroy]
 
   def index
     user_id = current_user.id
@@ -61,10 +61,22 @@ class TransactionsController < ApplicationController
     @checkpoints = @transaction.checkpoints.order(created_at: :desc)
   end
 
+  def destroy
+    unless @transaction.creator_id == current_user.id
+      return redirect_to transaction_path(@transaction), alert: "Only the creator can delete this transaction."
+    end
+
+    @transaction.destroy
+    redirect_to transactions_path, notice: "Transaction deleted."
+  end
+
   private
 
   def set_transaction
-    @transaction = Chain.find(params[:id])
+    @transaction = Chain.find_by(id: params[:id])
+    return if @transaction
+
+    redirect_to transactions_path, alert: "Transaction not found."
   end
 
   def transaction_params

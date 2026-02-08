@@ -11,9 +11,12 @@ class TransactionParticipantsController < ApplicationController
       return redirect_to transaction_path(@transaction), alert: "You do not have permission to add participants."
     end
 
-    user = User.find_by(email: params[:participant_email].to_s.downcase)
+    email = params[:participant_email].to_s.strip.downcase
+    if email.blank?
+      return redirect_to transaction_path(@transaction), alert: "Participant email is required."
+    end
 
-    puts "Looking for user with email: #{params[:participant_email].to_s.downcase}"
+    user = User.where("lower(email) = ?", email).first
 
     unless user
       return redirect_to transaction_path(@transaction), alert: "User not found."
@@ -22,6 +25,7 @@ class TransactionParticipantsController < ApplicationController
     participant = @transaction.chain_participants.new(user: user, role: participant_role)
 
     if participant.save
+      assign_counterparty_if_needed(user, participant.role)
       notify_participant_added(user)
       redirect_to transaction_path(@transaction), notice: "Participant added."
     else
@@ -56,10 +60,7 @@ class TransactionParticipantsController < ApplicationController
     role
   end
 
-  private
-
   def notify_participant_added(user)
-    puts "Notifying user: #{user.email}"
     return if user == current_user
 
     NotificationsChannel.broadcast_to(
@@ -68,5 +69,16 @@ class TransactionParticipantsController < ApplicationController
       body: "#{current_user.email} added you to #{@transaction.title.presence || "a transaction"}.",
       chain_id: @transaction.id
     )
+  end
+
+  def assign_counterparty_if_needed(user, role)
+    case role.to_s
+    when "lender"
+      return if @transaction.lender_id.present?
+      @transaction.update!(lender: user)
+    when "borrower"
+      return if @transaction.borrower_id.present?
+      @transaction.update!(borrower: user)
+    end
   end
 end
