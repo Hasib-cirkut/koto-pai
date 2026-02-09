@@ -33,7 +33,7 @@ class Checkpoint < ApplicationRecord
     broadcast_prepend_to chain,
                          target: dom_id(chain, :checkpoints),
                          partial: "checkpoints/checkpoint",
-                         locals: { checkpoint: self, transaction: chain }
+                         locals: { checkpoint: self, chain: chain }
 
     broadcast_replace_to chain,
                          target: dom_id(chain, :outstanding),
@@ -43,11 +43,11 @@ class Checkpoint < ApplicationRecord
     broadcast_replace_to chain,
                          target: dom_id(chain, :checkpoint_count),
                          partial: "checkpoints/count",
-                         locals: { transaction: chain }
+                         locals: { chain: chain }
 
     broadcast_replace_to chain,
                          target: dom_id(chain, :card),
-                         partial: "transactions/card",
-                         locals: { transaction: chain }
+                         partial: "chains/card",
+                         locals: { chain: chain }
   end
 end

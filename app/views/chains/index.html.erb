@@ -1,0 +1,18 @@
+<% content_for :page_title, "Your Ledger" %>
+<% content_for :breadcrumb, "Home" %>
+
+<%= turbo_stream_from "chains_user_#{current_user.id}" %>
+
+<div id="chains_list" class="space-y-4">
+  <% if @chains.empty? %>
+    <div id="chains_empty" class="rounded-3xl border border-slate-800 bg-slate-900/60 p-6 text-center">
+      <p class="text-sm text-slate-300">No chains yet.</p>
+      <p class="mt-2 text-xs text-slate-500">Create one to start tracking what you owe or what you’re owed.</p>
+    </div>
+  <% else %>
+    <% @chains.each do |chain| %>
+      <%= turbo_stream_from chain %>
+      <%= render "chains/card", chain: chain %>
+    <% end %>
+  <% end %>
+</div>

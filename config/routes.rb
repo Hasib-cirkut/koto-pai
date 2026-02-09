@@ -11,11 +11,11 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  root "transactions#index"
+  root "chains#index"
 
-  resources :transactions, only: [:index, :new, :create, :show, :update, :destroy] do
+  resources :chains, only: [:index, :new, :create, :show, :update, :destroy] do
     get :history, on: :member
-    resources :transaction_participants, only: [:index, :create, :destroy]
+    resources :chain_participants, only: [:index, :create, :destroy]
     resources :checkpoints, only: [:create]
   end
 end

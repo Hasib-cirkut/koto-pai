@@ -1,13 +1,13 @@
-<% content_for :page_title, "New Transaction" %>
+<% content_for :page_title, "New Chain" %>
 <% content_for :breadcrumb, "Home / New" %>
 
 <div class="rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
-  <%= form_with scope: :transaction, url: transactions_path, class: "space-y-5" do |f| %>
-    <% if @transaction.errors.any? %>
+  <%= form_with scope: :chain, url: chains_path, class: "space-y-5" do |f| %>
+    <% if @chain.errors.any? %>
       <div class="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
         <p class="font-semibold">Please fix the following:</p>
         <ul class="mt-2 list-disc pl-4 text-xs text-rose-100">
-          <% @transaction.errors.full_messages.each do |message| %>
+          <% @chain.errors.full_messages.each do |message| %>
             <li><%= message %></li>
           <% end %>
         </ul>
@@ -31,7 +31,7 @@
       </div>
       <div>
         <%= f.label :currency, class: "text-xs uppercase tracking-[0.2em] text-slate-400" %>
-        <%= f.text_field :currency, value: @transaction.currency || "BDT", class: "mt-2 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100 focus:border-emerald-400 focus:outline-none" %>
+        <%= f.text_field :currency, value: @chain.currency || "BDT", class: "mt-2 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100 focus:border-emerald-400 focus:outline-none" %>
       </div>
     </div>
 
@@ -56,8 +56,8 @@
     </div>
 
     <div class="flex items-center justify-between">
-      <%= link_to "Back", transactions_path, class: "text-sm text-slate-400" %>
-      <%= f.submit "Create Transaction", class: "rounded-full bg-emerald-400 px-5 py-2 text-sm font-semibold text-slate-950" %>
+      <%= link_to "Back", chains_path, class: "text-sm text-slate-400" %>
+      <%= f.submit "Create Chain", class: "rounded-full bg-emerald-400 px-5 py-2 text-sm font-semibold text-slate-950" %>
     </div>
   <% end %>
 </div>
