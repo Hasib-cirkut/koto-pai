@@ -97,9 +97,11 @@ class ChainsController < ApplicationController
     recipients.each do |user|
       ActionCable.server.broadcast(
         "notifications_user_#{user.id}",
-        title: "New chain",
-        body: "#{current_user.email} created #{@chain.title.presence || "a chain"}.",
-        chain_id: @chain.id
+        {
+          title: "New chain",
+          body: "#{current_user.email} created #{@chain.title.presence || "a chain"}.",
+          chain_id: @chain.id
+        }
       )
     end
   end

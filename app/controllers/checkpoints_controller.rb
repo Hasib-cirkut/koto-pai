@@ -35,9 +35,11 @@ class CheckpointsController < ApplicationController
     recipients.each do |user|
       ActionCable.server.broadcast(
         "notifications_user_#{user.id}",
-        title: "Payment recorded",
-        body: "#{current_user.email} recorded ৳#{checkpoint.amount} for #{@chain.title.presence || "a chain"}.",
-        chain_id: @chain.id
+        {
+          title: "Payment recorded",
+          body: "#{current_user.email} recorded ৳#{checkpoint.amount} for #{@chain.title.presence || "a chain"}.",
+          chain_id: @chain.id
+        }
       )
     end
   end

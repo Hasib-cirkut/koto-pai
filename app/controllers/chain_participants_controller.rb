@@ -57,9 +57,11 @@ class ChainParticipantsController < ApplicationController
 
     ActionCable.server.broadcast(
       "notifications_user_#{user.id}",
-      title: "Added to chain",
-      body: "#{current_user.email} added you to #{@chain.title.presence || "a chain"}.",
-      chain_id: @chain.id
+      {
+        title: "Added to chain",
+        body: "#{current_user.email} added you to #{@chain.title.presence || "a chain"}.",
+        chain_id: @chain.id
+      }
     )
   end
 
