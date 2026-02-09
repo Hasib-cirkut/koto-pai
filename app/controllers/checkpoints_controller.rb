@@ -3,9 +3,7 @@ class CheckpointsController < ApplicationController
   before_action :set_chain
 
   def create
-    unless @chain.lender_id == current_user.id
-      return redirect_to chain_path(@chain), alert: "Only the lender can add checkpoints."
-    end
+    authorize @chain, :add_checkpoint?
 
     @checkpoint = @chain.checkpoints.new(checkpoint_params.merge(created_by: current_user))
 

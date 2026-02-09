@@ -7,9 +7,7 @@ class ChainParticipantsController < ApplicationController
   end
 
   def create
-    unless can_manage_participants?
-      return redirect_to chain_path(@chain), alert: "You do not have permission to add participants."
-    end
+    authorize @chain, :add_participant?
 
     email = params[:participant_email].to_s.strip.downcase
     if email.blank?
@@ -34,9 +32,7 @@ class ChainParticipantsController < ApplicationController
   end
 
   def destroy
-    unless can_manage_participants?
-      return redirect_to chain_path(@chain), alert: "You do not have permission to remove participants."
-    end
+    authorize @chain, :add_participant?
 
     participant = @chain.chain_participants.find(params[:id])
     participant.destroy
@@ -47,10 +43,6 @@ class ChainParticipantsController < ApplicationController
 
   def set_chain
     @chain = Chain.find(params[:chain_id])
-  end
-
-  def can_manage_participants?
-    @chain.creator_id == current_user.id || @chain.lender_id == current_user.id
   end
 
   def participant_role

@@ -3,14 +3,7 @@ class ChainsController < ApplicationController
   before_action :set_chain, only: [:show, :history, :update, :destroy]
 
   def index
-    user_id = current_user.id
-    @chains = Chain
-      .left_joins(:chain_participants)
-      .where(
-        "chains.lender_id = :user_id OR chains.borrower_id = :user_id OR chain_participants.user_id = :user_id",
-        user_id: user_id
-      )
-      .distinct
+    @chains = policy_scope(Chain)
       .order(created_at: :desc)
       .limit(5)
   end
@@ -55,27 +48,25 @@ class ChainsController < ApplicationController
   end
 
   def show
+    authorize @chain, :show?
     @checkpoint = @chain.checkpoints.new
     @participant = ChainParticipant.new
   end
 
   def history
+    authorize @chain, :show?
     @checkpoints = @chain.checkpoints.order(created_at: :desc)
   end
 
   def destroy
-    unless @chain.creator_id == current_user.id
-      return redirect_to chain_path(@chain), alert: "Only the creator can delete this chain."
-    end
+    authorize @chain, :destroy?
 
     @chain.destroy
     redirect_to chains_path, notice: "Chain deleted."
   end
 
   def update
-    unless @chain.creator_id == current_user.id
-      return redirect_to chain_path(@chain), alert: "Only the creator can update this chain."
-    end
+    authorize @chain, :update?
 
     if @chain.update(chain_params)
       redirect_to chain_path(@chain), notice: "Chain updated."
