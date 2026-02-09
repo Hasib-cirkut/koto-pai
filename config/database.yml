@@ -18,10 +18,10 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: <%= ENV.fetch("POSTGRES_USER") %>
-  password: <%= ENV.fetch("POSTGRES_PASSWORD") %>
-  host: <%= ENV.fetch("POSTGRES_HOST") %>
-  port: <%= ENV.fetch("POSTGRES_PORT") { 5432 } %>
+  username: <%= ENV["POSTGRES_USER"] %>
+  password: <%= ENV["POSTGRES_PASSWORD"] %>
+  host: <%= ENV.fetch("POSTGRES_HOST", "localhost") %>
+  port: <%= ENV.fetch("POSTGRES_PORT", 5432) %>
 
 
 development:
@@ -85,18 +85,13 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    database: koto_pai_production
-    username: koto_pai
-    password: <%= ENV["KOTO_PAI_DATABASE_PASSWORD"] %>
+    url: <%= ENV["DATABASE_URL"] %>
   cache:
     <<: *primary_production
-    database: koto_pai_production_cache
     migrations_paths: db/cache_migrate
   queue:
     <<: *primary_production
-    database: koto_pai_production_queue
     migrations_paths: db/queue_migrate
   cable:
     <<: *primary_production
-    database: koto_pai_production_cable
     migrations_paths: db/cable_migrate
