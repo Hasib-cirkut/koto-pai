@@ -35,8 +35,8 @@ class CheckpointsController < ApplicationController
     recipients = checkpoint.chain.participants.to_a.uniq - [current_user]
 
     recipients.each do |user|
-      NotificationsChannel.broadcast_to(
-        user,
+      ActionCable.server.broadcast(
+        "notifications_user_#{user.id}",
         title: "Payment recorded",
         body: "#{current_user.email} recorded ৳#{checkpoint.amount} for #{@chain.title.presence || "a chain"}.",
         chain_id: @chain.id

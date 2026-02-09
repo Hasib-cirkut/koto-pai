@@ -104,8 +104,8 @@ class ChainsController < ApplicationController
     recipients = (@chain.participants.to_a + [@chain.creator]).compact.uniq - [current_user]
 
     recipients.each do |user|
-      NotificationsChannel.broadcast_to(
-        user,
+      ActionCable.server.broadcast(
+        "notifications_user_#{user.id}",
         title: "New chain",
         body: "#{current_user.email} created #{@chain.title.presence || "a chain"}.",
         chain_id: @chain.id
