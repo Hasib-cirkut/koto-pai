@@ -11,7 +11,9 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  root "chains#index"
+  root "pages#home"
+
+  get "dashboard", to: "chains#index"
 
   resources :chains, only: [:index, :new, :create, :show, :update, :destroy] do
     get :history, on: :member

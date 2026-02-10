@@ -24,7 +24,8 @@
 
 <body class="min-h-dvh bg-slate-950 text-slate-100 antialiased" data-signed-in="<%= user_signed_in? %>">
 <main class="min-h-dvh">
-  <div class="mx-auto w-full max-w-md px-4 py-6">
+  <div class="<%= content_for(:container_class) || "mx-auto w-full max-w-md px-4 py-6" %>">
+    <% unless content_for(:hide_header) %>
     <header class="mb-6">
       <p class="text-xs uppercase tracking-[0.2em] text-slate-400 mb-2">Koto Pai</p>
       <% if user_signed_in? %>
@@ -53,6 +54,7 @@
         <% end %>
       </div>
     </header>
+    <% end %>
 
     <div id="notifications" class="mb-4 space-y-2"></div>
 

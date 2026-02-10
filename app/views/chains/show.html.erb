@@ -93,16 +93,19 @@
       <% end %>
     </div>
 
-    <%= form_with url: chain_chain_participants_path(@chain), class: "mt-4 grid gap-3" do %>
-      <input type="email" name="participant_email" placeholder="Add by email" required class="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100 focus:border-emerald-400 focus:outline-none" />
-      <div class="flex gap-3">
-        <select name="participant_role" class="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100 focus:border-emerald-400 focus:outline-none">
-          <option value="viewer">Viewer</option>
-          <option value="lender">Lender</option>
-          <option value="borrower">Borrower</option>
-        </select>
-        <button type="submit" class="rounded-2xl bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-950">Add</button>
-      </div>
+    <% current_participant = @chain.chain_participants.find { |p| p.user_id == current_user.id } %>
+    <% if current_participant&.role.in?(%w[creator lender]) %>
+      <%= form_with url: chain_chain_participants_path(@chain), class: "mt-4 grid gap-3" do %>
+        <input type="email" name="participant_email" placeholder="Add by email" required class="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100 focus:border-emerald-400 focus:outline-none" />
+        <div class="flex gap-3">
+          <select name="participant_role" class="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100 focus:border-emerald-400 focus:outline-none">
+            <option value="viewer">Viewer</option>
+            <option value="lender">Lender</option>
+            <option value="borrower">Borrower</option>
+          </select>
+          <button type="submit" class="rounded-2xl bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-950">Add</button>
+        </div>
+      <% end %>
     <% end %>
   </div>
 

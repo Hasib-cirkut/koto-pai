@@ -1,0 +1,111 @@
+<% content_for :title, "Koto Pai - Your Personal Debt Tracker" %>
+<% content_for :container_class, "w-full max-w-none px-0 py-0" %>
+<% content_for :hide_header, true %>
+
+<!-- Hero Section -->
+<div class="relative overflow-hidden bg-slate-950 px-4 py-16 sm:px-6 sm:py-24 lg:py-32">
+  <!-- Background gradient accent -->
+  <div class="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"></div>
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-emerald-500/5 rounded-full blur-3xl"></div>
+
+  <div class="relative mx-auto max-w-4xl text-center">
+    <p class="text-xs uppercase tracking-[0.3em] text-slate-500 mb-6">Simple Debt Tracking</p>
+    <h1 class="text-4xl font-bold tracking-tight text-slate-100 sm:text-5xl lg:text-6xl">
+      Track what you owe
+      <span class="block text-emerald-400 mt-2">& what's owed to you</span>
+    </h1>
+    <p class="mx-auto mt-6 max-w-2xl text-base text-slate-400 sm:text-lg">
+      Manage loans and repayments effortlessly with friends and family. Keep your financial relationships transparent and organized.
+    </p>
+    <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center items-center">
+      <%= link_to new_user_registration_path, class: "w-full sm:w-auto rounded-full border border-emerald-500/50 bg-emerald-500/10 px-8 py-3 text-sm font-medium text-emerald-200 hover:border-emerald-400 hover:bg-emerald-500/20 transition-colors" do %>
+        Get Started — Free
+      <% end %>
+      <%= link_to new_user_session_path, class: "w-full sm:w-auto rounded-full border border-slate-700 bg-slate-900 px-8 py-3 text-sm font-medium text-slate-300 hover:border-slate-500 hover:text-slate-100 transition-colors" do %>
+        Sign In
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Features Section -->
+<div class="bg-slate-950 px-4 py-16 sm:px-6 lg:py-24">
+  <div class="mx-auto max-w-5xl">
+    <p class="text-center text-xs uppercase tracking-[0.2em] text-slate-500 mb-4">Features</p>
+    <h2 class="text-center text-2xl font-semibold text-slate-100 mb-12 sm:text-3xl">Everything you need to track debts</h2>
+
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <!-- Feature 1 -->
+      <div class="rounded-3xl border border-slate-800 bg-slate-900/60 p-6 transition hover:border-slate-600">
+        <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-700 bg-slate-800/50">
+          <svg class="h-5 w-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+          </svg>
+        </div>
+        <h3 class="text-base font-semibold text-slate-100">Create Chains</h3>
+        <p class="mt-2 text-sm text-slate-400">Start tracking debts with friends and family by creating loan chains with clear terms.</p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="rounded-3xl border border-slate-800 bg-slate-900/60 p-6 transition hover:border-slate-600">
+        <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-700 bg-slate-800/50">
+          <svg class="h-5 w-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h3 class="text-base font-semibold text-slate-100">Track Payments</h3>
+        <p class="mt-2 text-sm text-slate-400">Record checkpoints and monitor outstanding amounts in real-time with automatic calculations.</p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="rounded-3xl border border-slate-800 bg-slate-900/60 p-6 transition hover:border-slate-600">
+        <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-700 bg-slate-800/50">
+          <svg class="h-5 w-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+          </svg>
+        </div>
+        <h3 class="text-base font-semibold text-slate-100">Stay Notified</h3>
+        <p class="mt-2 text-sm text-slate-400">Get instant notifications when payments are made or chains are updated by participants.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- How It Works Section -->
+<div class="bg-slate-950 px-4 py-16 sm:px-6 lg:py-24 border-t border-slate-900">
+  <div class="mx-auto max-w-5xl">
+    <p class="text-center text-xs uppercase tracking-[0.2em] text-slate-500 mb-4">How It Works</p>
+    <h2 class="text-center text-2xl font-semibold text-slate-100 mb-12 sm:text-3xl">Three simple steps</h2>
+
+    <div class="grid grid-cols-1 gap-8 sm:grid-cols-3">
+      <div class="text-center">
+        <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-slate-700 bg-slate-900 text-lg font-semibold text-emerald-400">1</div>
+        <h3 class="text-base font-medium text-slate-100">Create a Chain</h3>
+        <p class="mt-2 text-sm text-slate-500">Set up a new debt chain with lender, borrower, and amount.</p>
+      </div>
+      <div class="text-center">
+        <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-slate-700 bg-slate-900 text-lg font-semibold text-emerald-400">2</div>
+        <h3 class="text-base font-medium text-slate-100">Record Payments</h3>
+        <p class="mt-2 text-sm text-slate-500">Add checkpoints for partial or full repayments.</p>
+      </div>
+      <div class="text-center">
+        <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-slate-700 bg-slate-900 text-lg font-semibold text-emerald-400">3</div>
+        <h3 class="text-base font-medium text-slate-100">Track Balance</h3>
+        <p class="mt-2 text-sm text-slate-500">Monitor outstanding amounts in real-time.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA Section -->
+<div class="bg-slate-950 px-4 py-16 sm:px-6 lg:py-24 border-t border-slate-900">
+  <div class="mx-auto max-w-2xl text-center">
+    <h2 class="text-2xl font-semibold text-slate-100 sm:text-3xl">Ready to get started?</h2>
+    <p class="mt-4 text-slate-400">Join today and start tracking your debts with clarity.</p>
+    <div class="mt-8">
+      <%= link_to new_user_registration_path, class: "inline-flex rounded-full border border-emerald-500/50 bg-emerald-500/10 px-8 py-3 text-sm font-medium text-emerald-200 hover:border-emerald-400 hover:bg-emerald-500/20 transition-colors" do %>
+        Create Free Account
+      <% end %>
+    </div>
+  </div>
+</div>
