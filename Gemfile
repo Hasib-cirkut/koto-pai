@@ -66,5 +66,5 @@ end
 
 gem "devise", "~> 4.9"
 
-gem "dotenv-rails", "~> 3.1"
+gem "dotenv-rails", "~> 3.2"
 gem "pundit", "~> 2.4"
