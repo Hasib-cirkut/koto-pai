@@ -1,7 +1,7 @@
 <div id="<%= dom_id(chain, :checkpoints) %>" class="mt-4 space-y-2">
   <% if chain.checkpoints.any? %>
     <% chain.checkpoints.order(created_at: :desc).each do |checkpoint| %>
-      <%= render "checkpoints/checkpoint", checkpoint: checkpoint, chain: chain %>
+      <%= render "checkpoints/checkpoint", checkpoint: checkpoint, chain: chain, can_manage: (chain.lender_id == current_user.id || chain.creator_id == current_user.id) %>
     <% end %>
   <% else %>
     <p class="text-sm text-slate-500">No checkpoints yet.</p>

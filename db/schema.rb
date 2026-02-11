@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_09_195057) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_11_114500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -49,8 +49,12 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_09_195057) do
     t.text "note"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "status", default: 0, null: false
+    t.bigint "approved_by_id"
+    t.datetime "approved_at"
     t.index ["chain_id"], name: "index_checkpoints_on_chain_id"
     t.index ["created_by_id"], name: "index_checkpoints_on_created_by_id"
+    t.index ["status"], name: "index_checkpoints_on_status"
   end
 
   create_table "solid_cable_messages", force: :cascade do |t|
@@ -82,5 +86,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_09_195057) do
   add_foreign_key "chains", "users", column: "creator_id"
   add_foreign_key "chains", "users", column: "lender_id"
   add_foreign_key "checkpoints", "chains"
+  add_foreign_key "checkpoints", "users", column: "approved_by_id"
   add_foreign_key "checkpoints", "users", column: "created_by_id"
 end

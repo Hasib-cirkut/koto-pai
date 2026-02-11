@@ -19,6 +19,10 @@ class ChainPolicy < ApplicationPolicy
     creator? || lender? || borrower?
   end
 
+  def approve_checkpoint?
+    creator? || lender?
+  end
+
   class Scope < Scope
     def resolve
       scope

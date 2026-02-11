@@ -18,6 +18,11 @@ Rails.application.routes.draw do
   resources :chains, only: [:index, :new, :create, :show, :update, :destroy] do
     get :history, on: :member
     resources :chain_participants, only: [:index, :create, :destroy]
-    resources :checkpoints, only: [:create]
+    resources :checkpoints, only: [:create] do
+      member do
+        patch :approve
+        patch :reject
+      end
+    end
   end
 end

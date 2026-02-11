@@ -1,7 +1,7 @@
 <% content_for :page_title, @chain.title.presence || "Chain" %>
 <% content_for :breadcrumb, "Home / Chain" %>
 
-<%= turbo_stream_from @chain %>
+<%= turbo_stream_from [@chain, current_user] %>
 
 <div class="space-y-6">
   <div class="rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
@@ -84,12 +84,9 @@
       <p class="text-xs uppercase tracking-[0.2em] text-slate-500">Participants</p>
       <p class="text-xs text-slate-500"><%= @chain.participants.count %> total</p>
     </div>
-    <div class="mt-4 space-y-2">
+    <div id="<%= dom_id(@chain, :participants) %>" class="mt-4 space-y-2">
       <% @chain.chain_participants.includes(:user).each do |participant| %>
-        <div class="flex items-center justify-between rounded-2xl border border-slate-800 bg-slate-950 px-4 py-2 text-sm">
-          <span><%= participant.user.email %></span>
-          <span class="text-xs uppercase tracking-[0.2em] text-slate-500"><%= participant.role %></span>
-        </div>
+        <%= render "chain_participants/chain_participant", chain_participant: participant, chain: @chain %>
       <% end %>
     </div>
 
@@ -117,7 +114,12 @@
       </div>
     </div>
 
-    <% if @chain.lender_id == current_user.id %>
+    <% current_participant = @chain.chain_participants.find { |p| p.user_id == current_user.id } %>
+    <% is_lender = @chain.lender_id == current_user.id %>
+    <% is_borrower = @chain.borrower_id == current_user.id || current_participant&.role == "borrower" %>
+    <% can_add_checkpoint = is_lender || is_borrower %>
+
+    <% if can_add_checkpoint %>
       <%= form_with model: @checkpoint, url: chain_checkpoints_path(@chain), class: "mt-4 grid gap-3" do |f| %>
         <div class="grid gap-3 sm:grid-cols-2">
           <div>
@@ -129,10 +131,13 @@
             <%= f.text_field :note, class: "mt-2 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100 focus:border-emerald-400 focus:outline-none", placeholder: "Payment received" %>
           </div>
         </div>
-        <%= f.submit "Add Checkpoint", class: "w-full rounded-2xl bg-emerald-400 px-4 py-3 text-sm font-semibold text-slate-950" %>
+        <% if is_borrower && !is_lender %>
+          <p class="text-xs text-amber-400">Your checkpoint will be submitted as a request for lender approval.</p>
+        <% end %>
+        <%= f.submit is_lender ? "Add Checkpoint" : "Request Checkpoint", class: "w-full rounded-2xl bg-emerald-400 px-4 py-3 text-sm font-semibold text-slate-950" %>
       <% end %>
     <% else %>
-      <p class="mt-4 text-xs text-slate-500">Only the lender can add checkpoints.</p>
+      <p class="mt-4 text-xs text-slate-500">Only the lender or borrower can add checkpoints.</p>
     <% end %>
     <%= render "checkpoints/list", chain: @chain %>
   </div>
